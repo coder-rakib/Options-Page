@@ -237,15 +237,18 @@ function submenu_callback(){
 /**
  * ecqueue important scripts
  */
-add_action('admin_enqueue_scripts', 'my_admin_scripts');
-function my_admin_scripts() {
-    wp_enqueue_media();
-    wp_enqueue_script('custom-media', plugin_dir_url( __FILE__ ) . '/assets/js/my-script.js', array('jquery'), '1.0', true);
+function my_admin_scripts($screen) {
+    if( ('toplevel_page_home_settings' == $screen) || ('kaku-theme-options_page_submenu_settings' == $screen) ){
+        wp_enqueue_media();
+        wp_enqueue_script('custom-media', plugin_dir_url( __FILE__ ) . '/assets/js/my-script.js', array('jquery'), '1.0', true);
 
-    // Send translatable sting to JS
-    $translation_array = array(
-        'upload_image_text' => __('Upload Image', 'test'),
-        'select_image_text' => __('Select Image', 'test')
-    );
-    wp_localize_script( "custom-media", "custom_script_vars", $translation_array );
+        // Send translatable sting to JS
+        $translation_array = array(
+            'upload_image_text' => __('Upload Image', 'test'),
+            'select_image_text' => __('Select Image', 'test')
+        );
+        wp_localize_script( "custom-media", "custom_script_vars", $translation_array );
+    }
  }
+ 
+add_action('admin_enqueue_scripts', 'my_admin_scripts');
